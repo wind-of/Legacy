@@ -13,13 +13,14 @@ const {
 const { punctuatorsHandler } = require("./helpers")
 
 
-const IDENTIFIER_RE = /[a-zA-Z0-9]/
+const IDENTIFIER_RE = /^[a-z_$#][a-z_$#0-9]*$/i
+const NUMBER_RE = /^(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))$/
 
 const createToken = (value, type, pos) => ({ value, type, pos })
 const getToken = (arr, i) => arr[i] || UndefinedToken
-const getTokenType = (value) => punctuators.has(value) ? tokenTypes.Punctuator : identifiers.has(value) ? tokenTypes.Identifier : keywords.has(value) ? tokenTypes.Keyword : tokenTypes.Undefined
-const unexpectedTokenError = (v, p, m = "") => `UnexpectedToken: ${v} \n ${" ".repeat("UnexpectedToken".length + p + 1)}^ \n ${m}`
-const syntaxError = (v, p, m = "") => `SyntaxError: ${v} \n ${" ".repeat("UnexpectedToken".length + p + 1)}^ \n ${m}`
+const getTokenType = (value) => punctuators.has(value) ? tokenTypes.Punctuator : keywords.has(value) ? tokenTypes.Keyword : tokenTypes.Identifier
+const unexpectedTokenError = (v, p, m = "") => `UnexpectedToken: ${v} \n ${" ".repeat("UnexpectedToken".length + p)}^ \n ${m}`
+const syntaxError = (v, p, m = "") => `SyntaxError: ${v} \n ${" ".repeat("UnexpectedToken".length + p)}^ \n ${m}`
 
 
 function parse(input) {
@@ -35,11 +36,12 @@ function parse(input) {
       continue
     }
     if(digits.has(value) || value === ".") {
-      while(digits.has(input[i + 1])) value += input[++i]
+      while(NUMBER_RE.test(value + input[i + 1])) value += input[++i]
       tokens.push(createToken(value, tokenTypes.Numeric, i))
       continue
     }
-    while(IDENTIFIER_RE.test(input[i + 1]) && i + 1 < input.length) value += input[++i]
+    while(IDENTIFIER_RE.test(value + input[i + 1]) && i + 1 < input.length) value += input[++i]
+    console.log(value)
     value = value.trim()
     let tokenType = getTokenType(value)
     if(tokenType === tokenTypes.Undefined) {
@@ -66,7 +68,7 @@ function parse(input) {
       throw syntaxError(input, pos, "No opening parantheses")
     }
     if(value === "." && nextToken.type !== tokenTypes.Numeric) {
-      throw syntaxError(input, pos + 1, "Expected number, instead got " + nextToken.value)
+      throw syntaxError(input, nextToken.pos, "Expected number, instead got " + nextToken.value)
     }
     if(type === tokenTypes.Numeric && nextToken.type === tokenTypes.Numeric) {
       throw syntaxError(input, pos, "Expected operation sign between two numbers")
@@ -79,16 +81,16 @@ function parse(input) {
         throw syntaxError(input, pos + 1, "Unexpected punctuator \"" + nextToken.value + "\"")
       }
     }
-    if(type === tokenTypes.Identifier && nextToken.value !== "(") {
-      throw syntaxError(input, pos + 1)
-    }
+    // if(type === tokenTypes.Identifier && nextToken.value !== "(") {
+    //   throw syntaxError(input, pos + 1)
+    // }
   }
   if(parentheses) throw syntaxError(input, input.length)
 
   return tokens
 }
 
-console.log(parse("(123 + 45 - 12 ** 5) + 10 & 5 - 14 / 7 + arccos(0.05) | 0 - 10 % (7 + 15) ^ 10 - 15 >>> 1 + arctg()"))
+parse("(123 + 45 - 12 ** 500) + 10 + 5 - 14.4 / 7 + arccos(0.05) | y - 10 % (7 + 15) ^ 10 - 15 >>> 1 + arctg()")
 
 module.exports = {
   parse
