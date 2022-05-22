@@ -1,4 +1,4 @@
-const { PARENTHESES_RE, tokenTypes } = require("../common")
+const { PARENTHESES_RE, TokenTypes } = require("../common")
 
 function FunctionIdentifierHandler(tree, tokens, index) {
   const nextToken = () => tokens[index + 1]
@@ -9,12 +9,12 @@ function FunctionIdentifierHandler(tree, tokens, index) {
     block.generator = true
     index++
   }
-  if(nextToken().type !== tokenTypes.Identifier) {
+  if(nextToken().type !== TokenTypes.Identifier) {
     throw new Error("Unexpected token " + nextToken().value)
   }
-  tree.id = { type: tokenTypes.Identifier, value: nextToken().value }
+  tree.id = { type: TokenTypes.Identifier, value: nextToken().value }
   
-  return ++index
+  return index + 1
 }
 
 function FunctionParamsHandler(tree, tokens, index) {
@@ -36,16 +36,16 @@ function FunctionParamsHandler(tree, tokens, index) {
     if(nextToken().value === ",") {
       index++
     }
-    if(nextToken().type === tokenTypes.Identifier) {
+    if(nextToken().type === TokenTypes.Identifier) {
       params.push(nextToken())
       index++
-      if(nextToken().type === tokenTypes.Identifier) {
+      if(nextToken().type === TokenTypes.Identifier) {
         throw new Error("Unexpected token" + nextToken().value)
       }
     }
   }
   tree.params = params
-  return index
+  return index + 1
 }
 
 module.exports = {
