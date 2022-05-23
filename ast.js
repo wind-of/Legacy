@@ -7,17 +7,16 @@ class AST {
     this.body = []
     this.sourceType = "script"
     this.type = "Program"
-    this.index = 0
-    this.tokens = new Tokenizer(input).tokenize()
-    Object.defineProperties(this.tokens, {
+    this.tokens = Object.create(new Tokenizer(input).tokenize(), {
+      index: { value: 0, writable: true },
       current: {
-        get: () => {
-          return this.tokens[this.index]
+        get() {
+          return this[this.index]
         }
       },
       next: {
-        get: () => {
-          return this.tokens[this.index + 1]
+        get() {
+          return this[this.index + 1]
         }
       }
     })
@@ -38,7 +37,7 @@ class AST {
       if(tokens.current.value !== "{") {
         throw new SyntaxError("Unexpected token " + tokens.current.value)
       }
-      this.index++
+      tokens.index++
     }
     while(tokens.current && tokens.current.value !== "}") {
       if(VariableTypes.has(tokens.current.value)) {
@@ -47,7 +46,7 @@ class AST {
       if(tokens.current.value === "function") {
         block.body.push(this.FunctionDeclaration())
       }
-      this.index++
+      tokens.index++
     }
     return global ? block.body : block
   }
