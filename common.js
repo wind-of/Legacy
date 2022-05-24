@@ -16,6 +16,8 @@ const Token = (value, type, line, index) => ({ type, value, pos: { line, index }
 const LineEndTokenSymbol = Symbol("\\n")
 const LineEndToken = Token(LineEndTokenSymbol, TokenTypes.Intermediate)
 
+const Error_ = (token) => {throw new SyntaxError("Unexpected token " + token.value)}
+
 module.exports = {
   SPACE_RE,
   PARENTHESES_RE,
@@ -32,5 +34,7 @@ module.exports = {
 
   Token,
 
-  LineEndToken
+  LineEndToken,
+
+  Error_
 }

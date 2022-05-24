@@ -84,23 +84,6 @@ function DestructurizationPattern(tokens, index) {
 
 
 
-function FunctionDeclaration(block_, tokens, index) {
-  const block = {
-    type: "FunctionDeclaration",
-    generator: false,
-    expression: false,
-    async: false,
-    body: []
-  }
-
-  index = FunctionIdentifierHandler(block, tokens, index)
-  index = FunctionParamsHandler(block, tokens, index)
-  index = BlockStatement(block, tokens, index)
-
-  block_.body.push(block)
-
-  return index
-}
 function VariableDeclaration(block_, tokens, index) {
   const block = {
     type: "VariableDeclaration",
@@ -126,28 +109,6 @@ function VariableDeclaration(block_, tokens, index) {
   return index
 }
 
-function BlockStatement(block_, tokens, index) {
-  const block = {
-    type: "BlockStatement",
-    body: []
-  }
-  if(tokens[index].value !== "{") {
-    throw new Error("Unexpected token " + tokens[index].value)
-  }
-  index++
-  while(tokens[index] && tokens[index].value !== "}") {
-    if(VariableTypes.has(tokens[index].value)) {
-      index = VariableDeclaration(block, tokens, index)
-    }
-    index++
-  }
-
-  block_.body.push(block)
-  return index + 1
-}
-
 module.exports = {
-  BlockStatement,
-  FunctionDeclaration,
   VariableDeclaration
 }

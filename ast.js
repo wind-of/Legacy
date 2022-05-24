@@ -1,5 +1,5 @@
-const { isFunction } = require("util")
 const { VariableTypes } = require("./common")
+const { FunctionIdentifierHandler, FunctionParamsHandler } = require("./functions/index")
 const { Tokenizer } = require("./tokenizer")
 
 class AST {
@@ -22,7 +22,7 @@ class AST {
     })
   }
 
-  buildAST() {
+  build() {
     this.body = this.BlockStatement({ global: true })
     return this
   }
@@ -51,11 +51,31 @@ class AST {
     return global ? block.body : block
   }
 
-  VariableDeclaration() {
-    return {}
+  FunctionDeclaration(options = { isExpression: false }) {
+    const tokens = this.tokens
+    const block = {
+      type: "FunctionDeclaration",
+      generator: false,
+      expression: Boolean(options.isExpression),
+      async: false,
+      body: []
+    }
+    if(tokens.next.value === "*") {
+      block.generator = true
+      tokens.index++
+    }
+
+    block.id = FunctionIdentifierHandler(tokens, Boolean(options.isExpression))
+    tokens.index++
+    block.params = FunctionParamsHandler(tokens)
+    tokens.index++
+    block.body = this.BlockStatement(tokens).body
+    tokens.index++
+
+    return block
   }
-  FunctionDeclaration() {
-    return {}
+  VariableDeclaration() {
+    return {value: "Variable"}
   }
 }
 

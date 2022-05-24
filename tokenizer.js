@@ -2,15 +2,11 @@ const {
   NUMBER_RE,
   SPACE_RE,
   IDENTIFIER_RE,
-
   digits,
   punctuators,
   keywords,
-
   Token,
-
   TokenTypes,
-
   LineEndToken
 } = require("./common")
 

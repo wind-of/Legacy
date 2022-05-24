@@ -1,8 +1,28 @@
 const fs = require("fs")
-const code = fs.readFileSync("./code").toString()
+
+const code = 
+`var p = 5;
+
+function myFunc() {
+    var p = 9;
+
+    function decl() {
+        console.log(p);
+    }
+    var expr = function k() {
+        console.log(p);
+    };
+    var cons = new Function('\tconsole.log(p);');
+
+    decl();
+    expr();
+    cons();
+}
+
+myFunc();`
 
 const { AST } = require("./ast")
-// console.log(new AST(AST.toString()).tokens)
-console.log(new AST(code).buildAST().body)
+const k = new AST(code).build().body
 
-// fs.writeFileSync("kek.json", JSON.stringify(k))
+console.log(k)
+fs.writeFileSync("kek.json", JSON.stringify(k))
