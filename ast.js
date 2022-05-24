@@ -1,6 +1,7 @@
-const { VariableTypes } = require("./common")
+const { VariableTypes, TokenTypes, Error_, OPENING_BRACKETS_RE } = require("./common")
 const { FunctionIdentifierHandler, FunctionParamsHandler } = require("./functions/index")
 const { Tokenizer } = require("./tokenizer")
+const { ArrayPattern } = require("./variables/patterns")
 
 class AST {
   constructor(input) {
@@ -75,7 +76,41 @@ class AST {
     return block
   }
   VariableDeclaration() {
-    return {value: "Variable"}
+    const tokens = this.tokens
+    const block = {
+      type: "VariableDeclaration",
+      declarations: [],
+      kind: tokens.current
+    }
+    
+    while(true) {
+      const declarator = {
+        type: "VariableDeclarator",
+        init: null
+      }
+      if(tokens.next.type !== TokenTypes.Identifier && !OPENING_BRACKETS_RE.test(tokens.next.value)) {
+        Error_(tokens.next)
+      }
+      if(tokens.next.type === TokenTypes.Identifier) {
+        declarator.id = tokens.next
+      } else if(tokens.next.value === "[") {
+        declarator.id = ObjectPattern(tokens)
+      } else {
+        declarator.id = ArrayPattern(tokens)
+      }
+      tokens.index++
+      if(tokens.next.value === "=") {
+        tokens.index++
+        block.init = handleExpression(tokens)
+        tokens.index++
+      }
+      block.declarations.push(declarator)
+      if(tokens.next.value !== ",") {
+        break
+      }
+    }
+    
+    return block
   }
 }
 

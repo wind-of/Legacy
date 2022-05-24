@@ -1,5 +1,6 @@
 const { TokenTypes, Error_ } = require("../common")
-const { ObjectPattern, ArrayPattern, paramHandler } = require("./params/index")
+const { ObjectPattern, ArrayPattern } = require("../variables/patterns")
+const { paramHandler } = require("./params/index")
 
 function FunctionIdentifierHandler(tokens, isExpression) {
   if(!tokens.next) {

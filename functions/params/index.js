@@ -1,3 +1,4 @@
+const { AssignmentPattern } = require("../../variables/patterns")
 const { TokenTypes, Error_ } = require("../../common")
 
 function paramHandler(tokens) {
@@ -8,16 +9,7 @@ function paramHandler(tokens) {
   }
   return tokens.next.value === "=" ? AssignmentPattern(tokens, left) : left
 }
-function AssignmentPattern(tokens, left) {
-  return {value: "Assignment"}
-}
-function ObjectPattern(tokens) {
-  return {value: "Object"}
-}
-function ArrayPattern(tokens) {
-  return {value: "Array"}
-}
 
 module.exports = {
-  AssignmentPattern, ObjectPattern, ArrayPattern, paramHandler
+  paramHandler
 }
