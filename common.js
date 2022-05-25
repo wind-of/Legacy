@@ -12,10 +12,6 @@ const TokenTypes = ["Punctuator", "Numeric", "Identifier", "Keyword", "Undefined
 const VariableTypes = new Set(["const", "let", "var"])
 
 const Token = (value, type, line, index) => ({ type, value, pos: { line, index } })
-
-const LineEndTokenSymbol = Symbol("\\n")
-const LineEndToken = Token(LineEndTokenSymbol, TokenTypes.Intermediate)
-
 const Error_ = (token) => {throw new SyntaxError("Unexpected token " + token.value)}
 
 module.exports = {
@@ -33,8 +29,6 @@ module.exports = {
   VariableTypes,
 
   Token,
-
-  LineEndToken,
 
   Error_
 }

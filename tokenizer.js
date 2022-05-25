@@ -7,7 +7,6 @@ const {
   keywords,
   Token,
   TokenTypes,
-  LineEndToken
 } = require("./common")
 
 class Tokenizer {
@@ -32,11 +31,6 @@ class Tokenizer {
     const input = this.input
     this.value = input[this.index]
     for(; this.index < input.length; this.value = input[++this.index]) {
-      if(this.value === "\n") {
-        this.lines[this.line++] = this.index
-        this.tokens.push(LineEndToken)
-        continue
-      }
       if(SPACE_RE.test(input[this.index])) {
         continue
       }

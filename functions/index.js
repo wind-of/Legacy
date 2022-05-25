@@ -1,6 +1,6 @@
 const { TokenTypes, Error_ } = require("../common")
 const { ObjectPattern, ArrayPattern } = require("../variables/patterns")
-const { paramHandler } = require("./params/index")
+const { Parameter } = require("./params/index")
 
 function FunctionIdentifierHandler(tokens, isExpression) {
   if(!tokens.next) {
@@ -32,7 +32,7 @@ function FunctionParamsHandler(tokens) {
       params.push(ArrayPattern(tokens))
     }
     else if(tokens.next.type === TokenTypes.Identifier) {
-      params.push(paramHandler(tokens))
+      params.push(Parameter(tokens))
     }
     if(tokens.next.value === ")") {
       break

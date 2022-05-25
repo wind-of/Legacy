@@ -1,7 +1,7 @@
 const { AssignmentPattern } = require("../../variables/patterns")
 const { TokenTypes, Error_ } = require("../../common")
 
-function paramHandler(tokens) {
+function Parameter(tokens) {
   const left = tokens.next
   tokens.index++
   if(tokens.next.type !== TokenTypes.Punctuator) {
@@ -11,5 +11,5 @@ function paramHandler(tokens) {
 }
 
 module.exports = {
-  paramHandler
+  Parameter
 }

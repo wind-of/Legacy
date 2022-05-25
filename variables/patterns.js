@@ -1,7 +1,5 @@
 /*
 {
-"type": "VariableDeclarator",
-"id": {
   "type": "ArrayPattern",
   "elements": [
     {
@@ -15,43 +13,52 @@
   ]
 },
 {
-  "type": "VariableDeclarator",
-  "id": {
-    "type": "ObjectPattern",
-    "properties": [
-      {
-        "type": "Property",
-        "key": {
-          "type": "Identifier",
-          "name": "k123"
-        },
-        "computed": false,
-        "value": {
-          "type": "Identifier",
-          "name": "k123"
-        },
-        "kind": "init",
-        "method": false,
-        "shorthand": true
+  "type": "ObjectPattern",
+  "properties": [
+    {
+      "type": "Property",
+      "key": {
+        "type": "Identifier",
+        "name": "k123"
       },
-      {
-        "type": "Property",
-        "key": {
-          "type": "Identifier",
-          "name": "k12412"
-        },
-        "computed": false,
-        "value": {
-          "type": "Identifier",
-          "name": "k12412"
-        },
-        "kind": "init",
-        "method": false,
-        "shorthand": true
-      }
-    ]
+      "computed": false,
+      "value": {
+        "type": "Identifier",
+        "name": "k123"
+      },
+      "kind": "init",
+      "method": false,
+      "shorthand": true
+    },
+    {
+      "type": "Property",
+      "key": {
+        "type": "Identifier",
+        "name": "k12412"
+      },
+      "computed": false,
+      "value": {
+        "type": "Identifier",
+        "name": "k12412"
+      },
+      "kind": "init",
+      "method": false,
+      "shorthand": true
+    }
+  ]
+}
+{
+  "type": "AssignmentPattern",
+  "left": {
+    "type": "Identifier",
+    "name": "lol"
   },
-  
+  "right": {
+    "type": "Literal",
+    "value": 123,
+    "raw": "123"
+  }
+}
 */
 
 function AssignmentPattern(tokens, left) {
