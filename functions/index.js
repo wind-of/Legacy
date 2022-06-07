@@ -1,6 +1,6 @@
 const { TokenTypes, Error_ } = require("../common")
 const { ObjectPattern, ArrayPattern } = require("../variables/patterns")
-const { Parameter } = require("./params/index")
+const { Parameter, RestElement } = require("./params/index")
 
 function FunctionIdentifierHandler(tokens, isExpression) {
   if(!tokens.next) {
@@ -20,7 +20,7 @@ function FunctionParamsHandler(tokens) {
     Error_(tokens.next)
   }
   tokens.index++
-  if(!tokens.next || tokens.next.type !== TokenTypes.Identifier && !["[", "{", ")"].includes(tokens.next.value)) {
+  if(!tokens.next || tokens.next.type !== TokenTypes.Identifier && !["[", "{", ")", "..."].includes(tokens.next.value)) {
     Error_(tokens.next || { value: "end of the string" })
   }
   const params = []
@@ -33,6 +33,9 @@ function FunctionParamsHandler(tokens) {
     }
     else if(tokens.next.type === TokenTypes.Identifier) {
       params.push(Parameter(tokens))
+    }
+    else if(tokens.next.value === "..." ) {
+      params.push(RestElement(tokens))
     }
     if(tokens.next.value === ")") {
       break

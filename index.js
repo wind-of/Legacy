@@ -3,7 +3,7 @@ const fs = require("fs")
 const code = 
 `var p = 5;
 
-function myFunc() {
+function myFunc(...k) {
     var p = 9;
 
     function decl() {
