@@ -1,7 +1,8 @@
 const { VariableTypes, TokenTypes, Error_, OPENING_BRACKETS_RE } = require("./common")
 const { FunctionIdentifierHandler, FunctionParamsHandler } = require("./functions/index")
 const { Tokenizer } = require("./tokenizer")
-const { ArrayPattern } = require("./variables/patterns")
+const { DestructurizationPattern } = require("./variables/patterns")
+const { handleExpression } = require("./expressions/expression")
 
 class AST {
   constructor(input) {
@@ -80,7 +81,7 @@ class AST {
     const block = {
       type: "VariableDeclaration",
       declarations: [],
-      kind: tokens.current
+      kind: tokens.current.value
     }
     
     while(true) {
@@ -91,13 +92,7 @@ class AST {
       if(tokens.next.type !== TokenTypes.Identifier && !OPENING_BRACKETS_RE.test(tokens.next.value)) {
         Error_(tokens.next)
       }
-      if(tokens.next.type === TokenTypes.Identifier) {
-        declarator.id = tokens.next
-      } else if(tokens.next.value === "[") {
-        declarator.id = ObjectPattern(tokens)
-      } else {
-        declarator.id = ArrayPattern(tokens)
-      }
+      declarator.id = tokens.next.type === TokenTypes.Identifier ? tokens.next : DestructurizationPattern(tokens)
       tokens.index++
       if(tokens.next.value === "=") {
         tokens.index++

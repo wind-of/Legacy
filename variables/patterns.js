@@ -71,6 +71,9 @@ function ArrayPattern(tokens) {
   return {value: "Array"}
 }
 
+function DestructurizationPattern(tokens) {
+  return tokens.current.value === "{" ? ObjectPattern(tokens) : ArrayPattern(tokens)
+}
 module.exports = {
-  AssignmentPattern, ObjectPattern, ArrayPattern
+  DestructurizationPattern, AssignmentPattern, ObjectPattern, ArrayPattern
 }
