@@ -46,7 +46,12 @@ function FunctionParamsHandler(tokens) {
   return params
 }
 
+function ReturnStatement(tokens) {
+
+}
+
 module.exports = {
   FunctionParamsHandler,
   FunctionIdentifierHandler,
+  ReturnStatement
 }

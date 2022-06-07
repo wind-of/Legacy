@@ -2,7 +2,7 @@ const { VariableTypes, TokenTypes, Error_, OPENING_BRACKETS_RE } = require("./co
 const { FunctionIdentifierHandler, FunctionParamsHandler } = require("./functions/index")
 const { Tokenizer } = require("./tokenizer")
 const { DestructurizationPattern } = require("./variables/patterns")
-const { handleExpression } = require("./expressions/expression")
+const { HandleExpression } = require("./expressions/expression")
 
 class AST {
   constructor(input) {
@@ -53,6 +53,9 @@ class AST {
     return global ? block.body : block
   }
 
+  ClassDeclaration() {
+    const tokens = this.tokens
+  }
   FunctionDeclaration(options = { isExpression: false }) {
     const tokens = this.tokens
     const block = {
@@ -96,7 +99,7 @@ class AST {
       tokens.index++
       if(tokens.next.value === "=") {
         tokens.index++
-        block.init = handleExpression(tokens)
+        block.init = HandleExpression(tokens)
         tokens.index++
       }
       block.declarations.push(declarator)
