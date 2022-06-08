@@ -2,3 +2,7 @@
 2. Spread element in array
 3. REMAKE FROM "tokens.next" to "tokens.current" (DONE)
 4. tokens.(prev|current|next) always returns { type, value } object (DONE)
+5. Separate declarations from the AST class (DONE)
+6. Describe binary operators
+7. Describe ternary operators
+8. Describe expressions

@@ -1,6 +1,6 @@
 const { TokenTypes, Error_ } = require("../common")
 const { ObjectPattern, ArrayPattern } = require("../variables/patterns")
-const { Parameter, RestElement } = require("./params/index")
+const { Parameter, RestElement } = require("./params/functions.params")
 
 function FunctionIdentifierHandler(tokens, isExpression) {
   if(tokens.current.notExists) {
@@ -50,12 +50,7 @@ function FunctionParamsHandler(tokens) {
   return params
 }
 
-function ReturnStatement(tokens) {
-
-}
-
 module.exports = {
   FunctionParamsHandler,
-  FunctionIdentifierHandler,
-  ReturnStatement
+  FunctionIdentifierHandler
 }
