@@ -1,4 +1,4 @@
 1. Rest element in params (DONE)
 2. Spread element in array
 3. REMAKE FROM "tokens.next" to "tokens.current" (DONE)
-4. tokens.(prev|current|next) always returns { type, value } object
+4. tokens.(prev|current|next) always returns { type, value } object (DONE)

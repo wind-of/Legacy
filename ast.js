@@ -4,6 +4,8 @@ const { Tokenizer } = require("./tokenizer")
 const { DestructurizationPattern } = require("./variables/patterns")
 const { HandleExpression } = require("./expressions/expression")
 
+const UndefinedToken = { type: null, value: null, notExists: true }
+
 class AST {
   constructor(input) {
     this.body = []
@@ -13,17 +15,17 @@ class AST {
       index: { value: 0, writable: true },
       current: {
         get() {
-          return this[this.index]
+          return this[this.index] || UndefinedToken
         }
       },
       next: {
         get() {
-          return this[this.index + 1]
+          return this[this.index + 1] || UndefinedToken
         }
       },
       prev: {
         get() {
-          return this[this.index - 1]
+          return this[this.index - 1] || UndefinedToken
         }
       },
     })
