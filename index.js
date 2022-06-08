@@ -3,6 +3,8 @@ const fs = require("fs")
 const code = 
 `var p = 5;
 
+function kek (l, m, n, t) {}
+
 function myFunc(...k) {
     var p = 9;
 

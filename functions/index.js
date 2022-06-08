@@ -3,45 +3,46 @@ const { ObjectPattern, ArrayPattern } = require("../variables/patterns")
 const { Parameter, RestElement } = require("./params/index")
 
 function FunctionIdentifierHandler(tokens, isExpression) {
-  if(!tokens.next) {
+  if(!tokens.current) {
     Error_({ value: "end of the string" })
   }
-  if(tokens.next.type !== TokenTypes.Identifier) {
+  if(tokens.current.type !== TokenTypes.Identifier) {
     if(isExpression) {
-      return null
+      return
     }
-    Error_(tokens.next)
+    Error_(tokens.current)
   }
-  return { type: TokenTypes.Identifier, value: tokens.next.value }
+  tokens.index++
+  return { type: TokenTypes.Identifier, value: tokens.prev.value }
 }
 
 function FunctionParamsHandler(tokens) {
-  if(tokens.next.value !== "(") {
+  if(tokens.current.value !== "(") {
     Error_(tokens.next)
   }
   tokens.index++
-  if(!tokens.next || tokens.next.type !== TokenTypes.Identifier && !["[", "{", ")", "..."].includes(tokens.next.value)) {
-    Error_(tokens.next || { value: "end of the string" })
+  if(!tokens.current || tokens.current.type !== TokenTypes.Identifier && !["[", "{", ")", "..."].includes(tokens.current.value)) {
+    Error_(tokens.current || { value: "end of the string" })
   }
   const params = []
-  while(tokens.next.value !== ")") {
-    if(tokens.next.value === "{") {
+  while(tokens.current.value !== ")") {
+    if(tokens.current.value === "{") {
       params.push(ObjectPattern(tokens))
     }
-    else if(tokens.next.value === "[") {
+    else if(tokens.current.value === "[") {
       params.push(ArrayPattern(tokens))
     }
-    else if(tokens.next.type === TokenTypes.Identifier) {
+    else if(tokens.current.type === TokenTypes.Identifier) {
       params.push(Parameter(tokens))
     }
-    else if(tokens.next.value === "..." ) {
+    else if(tokens.current.value === "..." ) {
       params.push(RestElement(tokens))
     }
-    if(tokens.next.value === ")") {
+    if(tokens.current.value === ")") {
       break
     }
-    if(tokens.next.value !== ",") {
-      Error_(tokens.next)
+    if(tokens.current.value !== ",") {
+      Error_(tokens.current)
     }
     tokens.index++
   }

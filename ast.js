@@ -20,7 +20,12 @@ class AST {
         get() {
           return this[this.index + 1]
         }
-      }
+      },
+      prev: {
+        get() {
+          return this[this.index - 1]
+        }
+      },
     })
   }
 
@@ -61,7 +66,7 @@ class AST {
     const block = {
       type: "FunctionDeclaration",
       generator: false,
-      expression: Boolean(options.isExpression),
+      expression: !!options.isExpression,
       async: false,
       body: []
     }
@@ -69,11 +74,9 @@ class AST {
       block.generator = true
       tokens.index++
     }
-
-    block.id = FunctionIdentifierHandler(tokens, Boolean(options.isExpression))
     tokens.index++
+    block.id = FunctionIdentifierHandler(tokens, !!options.isExpression)
     block.params = FunctionParamsHandler(tokens)
-    tokens.index++
     block.body = this.BlockStatement(tokens).body
     tokens.index++
 
@@ -87,23 +90,24 @@ class AST {
       kind: tokens.current.value
     }
     
+    tokens.index++
     while(true) {
       const declarator = {
         type: "VariableDeclarator",
         init: null
       }
-      if(tokens.next.type !== TokenTypes.Identifier && !OPENING_BRACKETS_RE.test(tokens.next.value)) {
-        Error_(tokens.next)
+      if(tokens.current.type !== TokenTypes.Identifier && !OPENING_BRACKETS_RE.test(tokens.current.value)) {
+        Error_(tokens.current)
       }
-      declarator.id = tokens.next.type === TokenTypes.Identifier ? tokens.next : DestructurizationPattern(tokens)
+      declarator.id = tokens.current.type === TokenTypes.Identifier ? tokens.current : DestructurizationPattern(tokens)
       tokens.index++
-      if(tokens.next.value === "=") {
+      if(tokens.current.value === "=") {
         tokens.index++
         block.init = HandleExpression(tokens)
-        tokens.index++
+        tokens.index++ // remove after HandleExpression is done
       }
       block.declarations.push(declarator)
-      if(tokens.next.value !== ",") {
+      if(tokens.current.value !== ",") {
         break
       }
     }
