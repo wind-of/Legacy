@@ -4,7 +4,7 @@ const {
   IDENTIFIER_RE,
   digits,
   punctuators,
-  keywords,
+  Keywords,
   Token,
   TokenTypes,
 } = require("./common")
@@ -50,11 +50,12 @@ class Tokenizer {
         continue
       }
       this.identifiersHandler()
-      this.createToken(keywords.has(this.value) ? TokenTypes.Keyword : TokenTypes.Identifier)
+      this.createToken(Keywords.has(this.value) ? TokenTypes.Keyword : TokenTypes.Identifier)
     }
     return this.tokens
   }
   
+  noHandler() {}
   stringHandler() {
     this.index++
     while(this.input[this.index] && this.input[this.index] !== "\"") {
@@ -80,58 +81,57 @@ class Tokenizer {
   }
   punctuatorsHandler() {
     let value = this.value, i = this.index, input = this.input
+    const addNextSymbol = () => value += input[++i]
+
     if(value === "." && input[i + 1] === "." && input[i + 2] === ".") {
       value = "..."
       i += 2
     }
-    if(value === "+" && input[i + 1] === "+") {
-      value = "++"
-      i++
-    }
-    if(value === "-" && input[i + 1] === "--") {
-      value = "--"
-      i++
-    }
-    if(value === "*" && input[i + 1] === "*") {
-      value = "**"
-      i++
-    }
-    if(value === "=") {
-      if(input[i + 1] === ">") {
-        value = "=>"
-        i++
+    if(["+", "-", "*", "?", "&", "|"].includes(value)) {
+      if(["+", "-", "*", "?", "&", "|"].some((p) => value === p && input[i + 1] === p)) {
+        addNextSymbol()
       }
-      if(input[i + 1] === "=") {
-        value = "=="
-        i++
+      if(["+", "-", "**", "??", "&&", "||"].some((p) => value === p && input[i + 1] === "=")) {
+        addNextSymbol()
+      }
+    }
+    else if(value === "=") {
+      if(input[i + 1] === ">") {
+        addNextSymbol()
+      } else if(input[i + 1] === "=") {
+        addNextSymbol()
         if(input[i + 1] === "=") {
-          value = "==="
-          i++
+          addNextSymbol()
         }
       }
     }
-    if(value === "<") {
+    else if(value === "<") {
       if(input[i + 1] === "<") {
-        value = "<<"
-        i++
-      }
-      if(input[i + 1] === "=") {
-        value = "<="
-        i++
+        addNextSymbol()
+        if(input[i + 1] === "=") {
+          addNextSymbol()
+        }
+      } else if(input[i + 1] === "=") {
+        addNextSymbol()
       }
     }
-    if(value === ">") {
+    else if(value === ">") {
       if(input[i + 1] === "=") {
-        value = ">="
-        i++
-      }
-      if(input[i + 1] === ">") {
-        value = ">>"
-        i++
-        if(input[i + 1] === ">") {
-          value = ">>>"
-          i++
+        addNextSymbol()
+      } else if(input[i + 1] === ">") {
+        addNextSymbol()
+        if(input[i + 1] === ">" || input[i + 1] === "=") {
+          addNextSymbol()
+          if(input[i + 1] === "=") {
+            addNextSymbol()
+          }
         }
+      }
+    }
+    else if(value === "!" && input[i + 1] === "=") {
+      addNextSymbol()
+      if(input[i + 1] === "=") {
+        addNextSymbol()
       }
     }
     this.value = value

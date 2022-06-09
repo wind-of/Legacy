@@ -9,4 +9,5 @@
 (DONE)    9. List /=, *=, ?? and other assignment operators
 (DONE)    10. List statements
 (DONE)    11. List declarations
-          12. Parse every punctuator
+(DONE)    12. Handling all the punctuators
+          13. Better string parsing

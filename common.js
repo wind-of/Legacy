@@ -20,8 +20,8 @@ const logicalOperators = new Set([">", "<", "<=", ">=", "==", "!=", "===", "!=="
 const specialPunctuators = new Set(["(", ")", "[", "]", "{", "}", ":", ";", ".", "...", ",", "=", "=>", "++", "--", "**"])
 
 const digits = new Set(["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"])
-const punctuators = new Set([...arithmeticOperators, ...bitwiseOperators, ...bitwiseOperators, ...specialPunctuators, ...assignmentOperators])
-const keywords = new Set(["break", "case", "catch", "continue", "debugger", "default", "delete", "do", "else", "finally", "for", "function", "if", "in", "instanceof", "new", "return", "switch", "this", "throw", "try", "typeof", "var", "void", "while", "with", "class", "const", "enum", "export", "extends", "import", "super", "implements", "interface", "let", "package", "private", "protected", "public", "static", "yield", NULL, TRUE, FALSE, UNDEFINED])
+const punctuators = new Set([...arithmeticOperators, ...bitwiseOperators, ...specialPunctuators, ...assignmentOperators, ...logicalOperators])
+const Keywords = new Set(["break", "case", "catch", "continue", "debugger", "default", "delete", "do", "else", "finally", "for", "function", "if", "in", "instanceof", "new", "return", "switch", "this", "throw", "try", "typeof", "var", "void", "while", "with", "class", "const", "enum", "export", "extends", "import", "super", "implements", "interface", "let", "package", "private", "protected", "public", "static", "yield", NULL, TRUE, FALSE, UNDEFINED])
 
 const TokenTypes = ["Punctuator", "Numeric", "Identifier", "Keyword", "String", "Literal"].reduce((a, c) => (a[c] = c, a), {})
 const NodeTypes = ["Identifier", "Literal"].reduce((a, c) => (a[c] = c, a), {})
@@ -51,7 +51,7 @@ module.exports = {
 
   digits,
   punctuators,
-  keywords,
+  Keywords,
   
   TokenTypes,
   NodeTypes,
