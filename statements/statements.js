@@ -3,7 +3,64 @@ const { FunctionIdentifierHandler, FunctionParamsHandler } = require("../functio
 const { DestructurizationPattern } = require("../variables/patterns")
 const { HandleExpression } = require("../expressions/expressions")
 
-function ExpressionStatement() {
+function BlockStatement(tokens, options = { global: false, isFunctionBody: false }) {
+  const block = {
+    type: "BlockStatement",
+    body: []
+  }
+  if(!options.global) {
+    if(tokens.current.value !== "{") {
+      throw new SyntaxError("Unexpected token " + tokens.current.value)
+    }
+    tokens.index++
+  }
+  while(tokens.current && tokens.current.value !== "}") {
+    if(VariableTypes.has(tokens.current.value)) {
+      block.body.push(VariableDeclaration(tokens))
+      continue
+    }
+    if(tokens.current.value === "function") {
+      block.body.push(FunctionDeclaration(tokens))
+      continue
+    }
+    tokens.index++
+  }
+  return global ? block.body : block
+}
+
+function ExpressionStatement(tokens) {
+
+}
+
+function BreakStatement(tokens) {
+
+}
+
+function ReturnStatement(tokens) {
+
+}
+
+function ThrowStatement(tokens) {
+
+}
+
+function IfStatement(tokens) {
+
+}
+
+function TryStatement(tokens) {
+
+}
+
+function SwitchStatement(tokens) {
+
+}
+
+function ForStatement(tokens) {
+
+}
+
+function DoWhileStatement(tokens) {
 
 }
 
@@ -63,35 +120,6 @@ function FunctionDeclaration(tokens, options = { isExpression: false }) {
 
 function ClassDeclaration(tokens) {
   
-}
-
-function BlockStatement(tokens, options = { global: false, isFunctionBody: false }) {
-  const block = {
-    type: "BlockStatement",
-    body: []
-  }
-  if(!options.global) {
-    if(tokens.current.value !== "{") {
-      throw new SyntaxError("Unexpected token " + tokens.current.value)
-    }
-    tokens.index++
-  }
-  while(tokens.current && tokens.current.value !== "}") {
-    if(VariableTypes.has(tokens.current.value)) {
-      block.body.push(VariableDeclaration(tokens))
-      continue
-    }
-    if(tokens.current.value === "function") {
-      block.body.push(FunctionDeclaration(tokens))
-      continue
-    }
-    tokens.index++
-  }
-  return global ? block.body : block
-}
-
-function ReturnStatement(tokens) {
-
 }
 
 module.exports = {
