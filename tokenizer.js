@@ -26,11 +26,16 @@ class Tokenizer {
     this.tokens.push(
       Token(this.value, type, this.line, this.charIndex())
     )
+    console.log(this.tokens[this.tokens.length - 1])
   }
   tokenize() {
     const input = this.input
     this.value = input[this.index]
     for(; this.index < input.length; this.value = input[++this.index]) {
+      if(input[this.index] === "\n") {
+        this.lines[this.line] = this.index
+        this.line++
+      }
       if(SPACE_RE.test(input[this.index])) {
         continue
       }
