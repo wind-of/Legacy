@@ -1,8 +1,12 @@
-1. Rest element in params (DONE)
-2. Spread element in array
-3. REMAKE FROM "tokens.next" to "tokens.current" (DONE)
-4. tokens.(prev|current|next) always returns { type, value } object (DONE)
-5. Separate declarations from the AST class (DONE)
-6. Describe binary operators
-7. Describe ternary operators
-8. Describe expressions
+(DONE)    1. Rest element in params 
+          2. Spread element in array
+(DONE)    3. REMAKE FROM "tokens.next" to "tokens.current" 
+(DONE)    4. tokens.(prev|current|next) always returns { type, value } object 
+(DONE)    5. Separate declarations from the AST class 
+(DONE)    6. List binary operators 
+(DONE)    7. List ternary operators
+(DONE)    8. List expressions
+(DONE)    9. List /=, *=, ?? and other assignment operators
+(DONE)    10. List statements
+(DONE)    11. List declarations
+          12. Parse every punctuator
