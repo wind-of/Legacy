@@ -11,3 +11,4 @@
 (DONE)    11. List declarations
 (DONE)    12. Handling all the punctuators
           13. Better string parsing
+          14. Property accessors ([]) in MemberExpression
